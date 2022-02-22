@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 
 import QuoteItem from "./QuoteItem";
 import classes from "./QuoteList.module.css";
@@ -18,14 +18,21 @@ const sortQuotes = (quotes, ascending) => {
 const QuoteList = (props) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  let location = useLocation();
 
   const isSortingAscending = searchParams.get("sort") === "asc";
   const sortedQuotes = sortQuotes(props.quotes, isSortingAscending);
 
   const sortButtonHandler = () => {
-    navigate("/quotes?sort=" + (isSortingAscending ? "desc" : "asc"), {
-      replace: true,
-    });
+    navigate(
+      {
+        pathname: location.pathname,
+        search: `${"?sort=" + (isSortingAscending ? "desc" : "asc")}`,
+      },
+      {
+        replace: true,
+      }
+    );
   };
 
   return (
